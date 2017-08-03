@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body {
+				margin: 0;
+				background-color: #000;
+				height: 3000px;
+				background: url(img/bg.jpg) no-repeat;
+				background-size: 100% 100%;
+				position: relative;
+			}
+			#buttons {
+				position: absolute;
+				right: 10px;
+				top: 200px;
+				background-color: #000;
+				display: none;
+			}
+			#buttons div{
+				width: 35px;
+				height: 35px;
+				background-color: #000;
+				position: relative;
+			}
+			#buttons div:hover {
+				background-color: #0fc35a;
+			}
+			.service {
+				background: #000 url(img/icon.png) no-repeat 7px 7px;
+			}
+			.qq {
+				background: #000 url(img/icon.png) no-repeat 8px -43px;
+			}
+			.fav {
+				background: #000 url(img/icon.png) no-repeat 9px -90px;
+			}
+			.backTop{
+				background: #000 url(img/icon.png) no-repeat 5px -143px;
+			}
+			#buttons span {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: -10;
+				padding: 0 10px;
+				border-top-left-radius: 5px;
+				border-bottom-left-radius: 5px;
+				font: 12px/35px "微软雅黑";				
+				color: #fff;
+				background-color: #0fc35a;
+				white-space: nowrap;
+				width: 0;
+				text-align: center;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="buttons">
+			<div class="service">
+				<span>客服电话：010-8888888</span>
+			</div>
+			<div class="qq">
+				<span>QQ: 123456789</span>
+			</div>
+			<div class="fav">
+				<span>点击收藏</span>
+			</div>
+			<div class="backTop"></div>
+		</div>		
+			
+		<script>
+			
+			var buttons = document.getElementById("buttons");
+			var divs = buttons.getElementsByTagName("div");
+			var spans = buttons.getElementsByTagName("span");
+			
+			window.onscroll = function(){
+				
+				var scrollT = document.body.scrollTop || document.documentElement.scrollTop;
+				
+				var windowHei = document.documentElement.clientHeight;
+				
+//				console.log(scrollT,windowHei);
+				
+				if( scrollT - windowHei > -200 ){
+					buttons.style.display = "block";
+					buttons.style.top = (scrollT + windowHei - 200) + "px";
+				}else {
+					buttons.style.display = "none";
+				}
+				
+			}
+			
+			for (var i = 0; i < divs.length; i++) {
+				divs[i].onmouseover = function(){
+					var span = this.getElementsByTagName("span")[0];
+					if( span && span.isLooping == false ){
+						var num = 10;
+						span.isLooping = true;
+						span.timer = setInterval(function(){
+							num += 5;
+							span.style.width = num + "px";
+							span.style.left = -num + "px";
+							if( num >= 160 ){
+								span.isLooping = false;
+								clearInterval( span.timer );
+							}
+						},10)
+						
+					}
+				}
+				divs[i].onmouseout = function(){
+					
+					var span = this.getElementsByTagName("span")[0];
+					if( span ){
+						span.isLooping = false;
+						clearInterval( span.timer )
+						span.style.width = "0px";
+						span.style.left = "0px";
+					}
+					
+				}
+			}
+			
+			for (var i = 0; i < spans.length; i++) {
+				spans[i].isLooping = false;
+			}
+			
+			divs[divs.length-1].onclick = function(){
+				var nowTop = parseInt(buttons.style.top)+200-document.documentElement.clientHeight;
+				
+				divs[divs.length-1].timer = setInterval(function(){
+					
+					nowTop -= 150;
+					if( nowTop <= 0 ){
+						nowTop = 0;
+					}
+					window.scrollTo(0,nowTop)
+					if( nowTop == 0 ){
+						clearInterval(divs[divs.length-1].timer);
+					}
+					
+				},14)
+				
+			}
+			
+		</script>
+		
+		
+	</body>
+</html>
